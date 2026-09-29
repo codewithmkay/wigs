@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import ProductCard from './ProductCard'
-import { products } from '../data/products'
+import { products } from '../../data/products'
 
 gsap.registerPlugin(ScrollTrigger)
 
