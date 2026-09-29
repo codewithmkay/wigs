@@ -2,39 +2,21 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { Flip } from 'gsap/Flip'
-import { products } from '../data/products' // change if you moved it
+import { products } from '../data/products'
+import useScramble from '../hooks/useScramble'
+import { money } from '../utils/money'
 
 gsap.registerPlugin(Flip)
 
 const TEXTURES = ['All', 'Straight', 'Wavy', 'Curly']
 const LENGTHS = [['all', 'Any length'], ['short', 'Short (up to 14")'], ['medium', 'Medium (15 to 22")'], ['long', 'Long (23"+)']]
 const SORTS = [['featured', 'Featured'], ['low', 'Price: low to high'], ['high', 'Price: high to low'], ['long', 'Length: longest first']]
-const MAXP = Math.ceil(Math.max(...products.map((p) => p.price)) / 10) * 10
+const prices = products.map((p) => p.price)
+const MAXP = Math.ceil(Math.max(...prices) / 1000) * 1000
+const MINP = Math.floor(Math.min(...prices) / 1000) * 1000
 const inRange = (n, k) => (k === 'short' ? n <= 14 : k === 'medium' ? n > 14 && n <= 22 : k === 'long' ? n > 22 : true)
 const pad = (n) => String(n).padStart(2, '0')
 const calm = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-/* text that decodes itself on load */
-function useScramble(ref, text) {
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    el.textContent = text
-    if (calm()) return
-    const chars = '01<>/[]{}#*+'
-    const o = { p: 0 }
-    const tw = gsap.to(o, {
-      p: 1, duration: 1.4, ease: 'none', delay: 0.4,
-      onUpdate() {
-        const n = Math.floor(o.p * text.length)
-        el.textContent = text.slice(0, n) +
-          [...text.slice(n)].map((c) => (c === ' ' ? ' ' : chars[(Math.random() * chars.length) | 0])).join('')
-      },
-      onComplete() { el.textContent = text },
-    })
-    return () => tw.kill()
-  }, [text, ref])
-}
 
 function ShopCard({ p, i }) {
   const card = useRef(null)
@@ -58,14 +40,16 @@ function ShopCard({ p, i }) {
   return (
     <article className="scard" data-flip-id={p.id} ref={card} onPointerMove={move} onPointerLeave={leave}>
       <Link to={`/product/${p.id}`} className="s-in" ref={inner} style={{ '--a': p.tone[0], '--b': p.tone[1] }}
-        aria-label={`${p.name}, $${p.price}`}>
+        aria-label={`${p.name}, ${money(p.price)}`}>
+        <img className="s-img" src={p.image} alt="" loading="lazy" />
+        <span className="s-shade" aria-hidden="true" />
         <span className="s-id">VLR-{pad(i + 1)}</span>
         <span className="s-len">{p.length}<small>in</small></span>
         <span className="s-brk" aria-hidden="true" />
         <span className="s-spec"><i>{p.lace}</i><i>Pre-plucked</i><i>Human hair</i></span>
         <span className="s-meta">
           <span><b>{p.name}</b><em>{p.texture} / {p.color}</em></span>
-          <b className="s-price">${p.price}</b>
+          <b className="s-price">{money(p.price)}</b>
         </span>
       </Link>
     </article>
@@ -114,12 +98,11 @@ export default function Shop() {
     q && ['q', `"${q}"`, ''],
     texture !== 'All' && ['texture', texture, 'All'],
     length !== 'all' && ['length', LENGTHS.find(([v]) => v === length)[1], 'all'],
-    max < MAXP && ['max', `Up to $${max}`, MAXP],
+    max < MAXP && ['max', `Up to ${money(max)}`, MAXP],
   ].filter(Boolean)
 
   useScramble(tagRef, '100% human hair. Pre-plucked. Ready to wear.')
 
-  // page intro
   useLayoutEffect(() => {
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
@@ -134,7 +117,6 @@ export default function Shop() {
     return () => mm.revert()
   }, [])
 
-  // results glide into place when filters or view change
   const listKey = list.map((p) => p.id).join('-')
   useLayoutEffect(() => {
     const st = flipState.current
@@ -147,7 +129,6 @@ export default function Shop() {
     })
   }, [listKey, view])
 
-  // counter tween
   useEffect(() => {
     const t = gsap.to(cnt.current, {
       v: list.length, duration: 0.6, ease: 'power2.out',
@@ -207,8 +188,8 @@ export default function Shop() {
             {SORTS.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
           <label className="price" htmlFor="f-max">
-            <span>Up to <b>${max}</b></span>
-            <input id="f-max" type="range" min="100" max={MAXP} step="10" value={max}
+            <span>Up to <b>{money(max)}</b></span>
+            <input id="f-max" type="range" min={MINP} max={MAXP} step="500" value={max}
               onChange={(e) => setParam('max', e.target.value, MAXP)} />
           </label>
         </div>
@@ -227,7 +208,7 @@ export default function Shop() {
 
       {list.length ? (
         <div className={'sgrid' + (view === 'big' ? ' big' : '')}>
-          {list.map((p, i) => <ShopCard key={p.id} p={p} i={products.findIndex((x) => x.id === p.id)} />)}
+          {list.map((p) => <ShopCard key={p.id} p={p} i={products.findIndex((x) => x.id === p.id)} />)}
         </div>
       ) : (
         <div className="sh-empty">

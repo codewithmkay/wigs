@@ -1,0 +1,1 @@
+export const money = (n) => `KSh ${Number(n).toLocaleString('en-US')}`

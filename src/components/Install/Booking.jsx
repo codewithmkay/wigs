@@ -6,6 +6,7 @@ import { employees } from '../../data/employees'
 import { products } from '../../data/products'
 import { assign, dayHasSlots, fromISO, getSlots } from '../../data/availability'
 import Calendar from './Calendar'
+import { money } from '../../utils/money'
 
 const STEPS = ['Service', 'Stylist', 'Time', 'Details']
 const ANY = { id: 'any', name: 'First available', role: 'We match you with the next free specialist', mark: '1st', tone: ['#0d0d12', '#6d4aff'], specialties: [] }

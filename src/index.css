@@ -392,3 +392,36 @@ html.lock{overflow:hidden}
 }
 @media(max-width:380px){.bk-rail span{display:none}}
 @media(prefers-reduced-motion:reduce){.ins-aurora{display:none}.slot.sk{animation:none}}
+
+
+
+
+
+
+
+
+
+
+/* PHOTOS */
+.pcard-art,.sc-slide{position:relative;overflow:hidden}
+.pcard-art{background:linear-gradient(160deg,var(--a),var(--b))}
+.pcard-art img,.s-img,.sc-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%;
+ transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.pcard-art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.5))}
+.pcard-len{position:relative;z-index:1;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.pcard:hover .pcard-art img,.scard:hover .s-img,.sc-slide:hover .sc-img{transform:scale(1.07)}
+
+.s-img{z-index:0}
+.s-shade{position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 35%,transparent 55%,rgba(0,0,0,.55))}
+.s-in::before{z-index:1}
+.s-price{white-space:nowrap}
+
+.sc-img{z-index:0}
+.sc-shade{position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 40%,rgba(0,0,0,.6))}
+.sc-slide>.sc-len,.sc-slide>div,.sc-end b,.sc-end .btn{position:relative;z-index:1}
+
+/* stylist photos */
+.av{object-position:center 20%}
+.emp .av{width:76px!important;height:76px!important}

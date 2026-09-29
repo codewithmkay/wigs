@@ -11,11 +11,9 @@ export default function Showcase() {
 
   useLayoutEffect(() => {
     const mm = gsap.matchMedia()
-
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const track = root.current.querySelector('.sc-track')
       const dist = () => Math.max(track.scrollWidth - window.innerWidth, 0)
-
       gsap.to(track, {
         x: () => -dist(),
         ease: 'none',
@@ -31,7 +29,6 @@ export default function Showcase() {
         },
       })
     }, root)
-
     return () => mm.revert()
   }, [])
 
@@ -46,12 +43,10 @@ export default function Showcase() {
       <div className="sc-wrap">
         <div className="sc-track">
           {products.map((p) => (
-            <Link
-              to={`/product/${p.id}`}
-              key={p.id}
-              className="sc-slide"
-              style={{ background: `linear-gradient(160deg, ${p.tone[0]}, ${p.tone[1]})` }}
-            >
+            <Link to={`/product/${p.id}`} key={p.id} className="sc-slide"
+              style={{ background: `linear-gradient(160deg, ${p.tone[0]}, ${p.tone[1]})` }}>
+              <img className="sc-img" src={p.image} alt="" loading="lazy" />
+              <span className="sc-shade" aria-hidden="true" />
               <span className="sc-len">{p.length}"</span>
               <div>
                 <b>{p.name}</b>
