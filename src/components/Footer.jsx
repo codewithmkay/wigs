@@ -1,0 +1,138 @@
+import { useLayoutEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
+// EDIT THESE: your real links and details
+const SOCIAL = {
+  instagram: 'https://instagram.com/yourhandle',
+  tiktok: 'https://tiktok.com/@yourhandle',
+  facebook: 'https://facebook.com/yourpage',
+  whatsapp: 'https://wa.me/15551234567', // country code + number, digits only
+}
+const CONTACT = { email: 'hello@velora.com', phone: '+1 555 123 4567', hours: 'Mon to Sat, 9am to 6pm' }
+
+const icons = {
+  instagram: (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".6" /></svg>
+  ),
+  tiktok: (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" /></svg>
+  ),
+  facebook: (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
+  ),
+  whatsapp: (
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg>
+  ),
+}
+
+const labels = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook', whatsapp: 'WhatsApp' }
+
+export default function Footer({ lenisRef }) {
+  const root = useRef(null)
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+
+  useLayoutEffect(() => {
+    const mm = gsap.matchMedia()
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from('.f-reveal', {
+        y: 40, opacity: 0, duration: 0.9, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: root.current, start: 'top 80%', once: true },
+      })
+      gsap.from('.f-mark span', {
+        yPercent: 60, opacity: 0, ease: 'none',
+        scrollTrigger: { trigger: '.f-mark', start: 'top bottom', end: 'bottom bottom', scrub: true },
+      })
+    }, root)
+    return () => mm.revert()
+  }, [])
+
+  const subscribe = (e) => {
+    e.preventDefault()
+    if (!email) return
+    // TODO: send `email` to your backend here
+    setSent(true)
+    setEmail('')
+  }
+
+  const toTop = () => {
+    if (lenisRef?.current) lenisRef.current.scrollTo(0)
+    else window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  return (
+    <footer className="footer" ref={root}>
+      <div className="f-top">
+        <h2 className="f-reveal">Ready for your next look?</h2>
+        <div className="f-reveal f-actions">
+          <Link to="/shop" className="btn light">Shop wigs</Link>
+          <Link to="/book" className="btn light ghost">Book installation</Link>
+        </div>
+      </div>
+
+      <div className="f-grid">
+        <div className="f-reveal f-brand">
+          <b className="logo">velora</b>
+          <p>Human hair wigs and expert installation. Get on the list for new drops and offers.</p>
+          {sent ? (
+            <p className="f-ok" role="status">You are on the list. Check your inbox.</p>
+          ) : (
+            <form className="f-form" onSubmit={subscribe}>
+              <label htmlFor="f-email" className="sr">Email address</label>
+              <input id="f-email" type="email" required placeholder="Your email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <button type="submit" className="btn light">Join</button>
+            </form>
+          )}
+        </div>
+
+        <nav className="f-reveal f-col" aria-label="Shop">
+          <h3>Shop</h3>
+          <Link to="/shop">All wigs</Link>
+          <Link to="/shop">Straight</Link>
+          <Link to="/shop">Wavy</Link>
+          <Link to="/shop">Curly</Link>
+        </nav>
+
+        <nav className="f-reveal f-col" aria-label="Services">
+          <h3>Services</h3>
+          <Link to="/installation">Installation</Link>
+          <Link to="/book">Book a stylist</Link>
+          <Link to="/installation">Aftercare and FAQ</Link>
+        </nav>
+
+        <div className="f-reveal f-col">
+          <h3>Contact</h3>
+          <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+          <a href={`tel:${CONTACT.phone.replace(/\s/g, '')}`}>{CONTACT.phone}</a>
+          <span>{CONTACT.hours}</span>
+          <div className="f-social">
+            {Object.keys(SOCIAL).map((k) => (
+              <a key={k} href={SOCIAL[k]} target="_blank" rel="noopener noreferrer" aria-label={labels[k]}>
+                {icons[k]}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="f-mark" aria-hidden="true"><span>velora</span></div>
+
+      <div className="f-bottom">
+        <span>&copy; {new Date().getFullYear()} Velora. All rights reserved.</span>
+        <div className="f-legal">
+          <Link to="/">Privacy</Link>
+          <Link to="/">Terms</Link>
+          <Link to="/">Shipping and returns</Link>
+        </div>
+        <button className="f-top-btn" onClick={toTop} aria-label="Back to top">
+          Back to top
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+        </button>
+      </div>
+    </footer>
+  )
+}

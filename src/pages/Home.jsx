@@ -4,6 +4,8 @@ import Marquee from '../components/Home/Marquee'
 import Products from '../components/Home/Products'
 import useSmoothScroll from '../hooks/useSmoothScroll'
 import Showcase from '../components/Home/Showcase'
+import Footer from '../components/Footer'   
+
 export default function Home() {
   const lenisRef = useSmoothScroll()
 
@@ -15,6 +17,7 @@ export default function Home() {
         <Marquee />
         <Products />
         <Showcase />
+        <Footer />
       </main>
     </>
   )
