@@ -44,7 +44,7 @@ export default function Navbar({ lenisRef }) {
   return (
     <>
       <header className="nav">
-        <Link to="/" className="logo">velora</Link>
+        <Link to="/" className="logo">Nywele_affordable_ke</Link>
 
         <nav className="desk" aria-label="Main">
           <NavLink to="/shop">Shop</NavLink>
