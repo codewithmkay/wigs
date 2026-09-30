@@ -1,41 +1,41 @@
-import { useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import ProductCard from './ProductCard'
-import { products } from '../../data/products'
 
-gsap.registerPlugin(ScrollTrigger)
+const money = (v) =>
+  typeof v === 'number' ? `KSh ${v.toLocaleString('en-KE')}` : v
 
-export default function Products() {
-  const root = useRef(null)
-
-  useLayoutEffect(() => {
-    const mm = gsap.matchMedia()
-    mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.from('.products-head > *', {
-        y: 30, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
-        scrollTrigger: { trigger: '.products-head', start: 'top 85%', once: true },
-      })
-      gsap.set('.pcard', { y: 50, opacity: 0 })
-      ScrollTrigger.batch('.pcard', {
-        start: 'top 92%',
-        once: true,
-        onEnter: (els) => gsap.to(els, { y: 0, opacity: 1, duration: 0.8, stagger: 0.12, ease: 'power3.out' }),
-      })
-    }, root)
-    return () => mm.revert()
-  }, [])
+export default function ProductCard({ product: p, index = 0 }) {
+  const name = p.name || 'Wig'
+  const tone = p.tone || ['#2b2540', '#7c5cff']
 
   return (
-    <section className="products" ref={root}>
-      <div className="products-head">
-        <h2>Featured wigs</h2>
-        <Link to="/shop" className="btn ghost">Shop all</Link>
-      </div>
-      <div className="pgrid">
-        {products.slice(0, 4).map((p) => <ProductCard key={p.id} product={p} />)}
-      </div>
-    </section>
+    <article className="pc">
+      <Link to="/shop" className="pc-link" aria-label={`${name}, view in shop`}>
+        <div className="pc-art" style={{ '--a': tone[0], '--b': tone[1] }}>
+          {p.image && (
+            <img className="pc-img" src={p.image} alt="" loading="lazy" decoding="async" draggable="false" />
+          )}
+          <span className="pc-shade" aria-hidden="true" />
+
+          <span className="pc-no">{String(index + 1).padStart(2, '0')}</span>
+          {p.length && <span className="pc-len">{p.length}"</span>}
+
+          <span className="pc-view">
+            View
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" /></svg>
+          </span>
+        </div>
+
+        <div className="pc-info">
+          <div className="pc-row">
+            <h3>{name}</h3>
+            <b className="pc-price">{money(p.price)}</b>
+          </div>
+          <div className="pc-tags">
+            {p.texture && <span>{p.texture}</span>}
+            {p.color && <span>{p.color}</span>}
+          </div>
+        </div>
+      </Link>
+    </article>
   )
 }

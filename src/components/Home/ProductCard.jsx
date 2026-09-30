@@ -1,21 +1,39 @@
 import { Link } from 'react-router-dom'
-import { money } from '../../utils/money'
 
-export default function ProductCard({ product: p }) {
+const money = (v) =>
+  typeof v === 'number' ? `KSh ${v.toLocaleString('en-KE')}` : v
+
+export default function ProductCard({ product: p, index = 0 }) {
+  const name = p.name || 'Wig'
+  const tone = p.tone || ['#2b2540', '#7c5cff']
+  const sub = [p.texture, p.color].filter(Boolean).join(' / ')
+
   return (
-    <article className="pcard">
-      <Link to={`/product/${p.id}`} className="pcard-art" aria-label={`View ${p.name}`}
-        style={{ '--a': p.tone[0], '--b': p.tone[1] }}>
-        <img src={p.image} alt={`${p.name}, ${p.length} inch ${p.texture.toLowerCase()} wig`} loading="lazy" />
-        <span className="pcard-len">{p.length}"</span>
-      </Link>
-      <div className="pcard-info">
-        <div>
-          <h3>{p.name}</h3>
-          <p className="muted">{p.texture}, {p.color}</p>
+    <article className="pc">
+      <Link to="/shop" className="pc-link" aria-label={`${name}, view in shop`}>
+        <div className="pc-art" style={{ '--a': tone[0], '--b': tone[1] }}>
+          {p.image && (
+            <img className="pc-img" src={p.image} alt="" loading="lazy" decoding="async" draggable="false" />
+          )}
+          <span className="pc-shade" aria-hidden="true" />
+
+          <span className="pc-no">{String(index + 1).padStart(2, '0')}</span>
+          {p.length && <span className="pc-len">{p.length}"</span>}
+
+          <span className="pc-view">
+            View
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" /></svg>
+          </span>
         </div>
-        <b>{money(p.price)}</b>
-      </div>
+
+        <div className="pc-info">
+          <div className="pc-txt">
+            <h3>{name}</h3>
+            {sub && <p className="muted">{sub}</p>}
+          </div>
+          <b className="pc-price">{money(p.price)}</b>
+        </div>
+      </Link>
     </article>
   )
 }
