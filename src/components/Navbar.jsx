@@ -4,12 +4,12 @@ import gsap from 'gsap'
 
 const links = [
   ['/', 'Home'],
+  ['/blog', 'Blog'],
   ['/shop', 'Shop'],
   ['/installation', 'Installation'],
   ['/book', 'Book'],
 ]
 
-// Put your logo file in /public/logo.png (square works best, PNG/SVG/WebP)
 const LOGO_SRC = '/logo.png'
 
 export default function Navbar({ lenisRef }) {
@@ -18,36 +18,57 @@ export default function Navbar({ lenisRef }) {
   const [logoOk, setLogoOk] = useState(true)
   const { pathname } = useLocation()
 
-  // close on route change
-  useEffect(() => { setMenu(false) }, [pathname])
+  useEffect(() => {
+    setMenu(false)
+  }, [pathname])
 
-  // close if the screen grows to desktop size
   useEffect(() => {
     const mq = window.matchMedia('(min-width:801px)')
     const fn = (e) => e.matches && setMenu(false)
+
     mq.addEventListener('change', fn)
     return () => mq.removeEventListener('change', fn)
   }, [])
 
-  // scrolled state (adds shadow / stronger glass)
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
+
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
+
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // scroll lock, link animation, Escape key
   useEffect(() => {
     lenisRef?.current?.[menu ? 'stop' : 'start']()
+
     document.documentElement.classList.toggle('lock', menu)
-    const calm = window.matchMedia('(prefers-reduced-motion:reduce)').matches
+
+    const calm = window.matchMedia(
+      '(prefers-reduced-motion:reduce)'
+    ).matches
+
     if (menu && !calm) {
-      gsap.fromTo('.m-link,.m-foot', { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.07, duration: 0.6, ease: 'power3.out', delay: 0.2 })
+      gsap.fromTo(
+        '.m-link,.m-foot',
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.07,
+          duration: 0.6,
+          ease: 'power3.out',
+          delay: 0.2,
+        }
+      )
     }
-    const esc = (e) => e.key === 'Escape' && setMenu(false)
+
+    const esc = (e) => {
+      if (e.key === 'Escape') setMenu(false)
+    }
+
     window.addEventListener('keydown', esc)
+
     return () => {
       window.removeEventListener('keydown', esc)
       document.documentElement.classList.remove('lock')
@@ -56,16 +77,31 @@ export default function Navbar({ lenisRef }) {
 
   return (
     <>
-      <header className={'nav' + (scrolled ? ' scrolled' : '') + (menu ? ' open' : '')}>
+      <header
+        className={
+          'nav' +
+          (scrolled ? ' scrolled' : '') +
+          (menu ? ' open' : '')
+        }
+      >
         <div className="nav-in">
-          <Link to="/" className="logo" aria-label="Nywele Affordable KE – Home">
+          <Link
+            to="/"
+            className="logo"
+            aria-label="Nywele Affordable KE – Home"
+          >
             <span className="logo-mark">
               {logoOk ? (
-                <img src={LOGO_SRC} alt="" onError={() => setLogoOk(false)} />
+                <img
+                  src={LOGO_SRC}
+                  alt=""
+                  onError={() => setLogoOk(false)}
+                />
               ) : (
                 <b>N</b>
               )}
             </span>
+
             <span className="logo-txt">
               <b>Nywele</b>
               <small>affordable_ke</small>
@@ -73,11 +109,25 @@ export default function Navbar({ lenisRef }) {
           </Link>
 
           <nav className="desk" aria-label="Main">
-            <NavLink to="/" end>Home</NavLink>
-             <NavLink to="/Blog">Blog</NavLink>
-            <NavLink to="/shop">Shop</NavLink>
-            <NavLink to="/installation">Installation</NavLink>
-            <NavLink to="/book" className="pill">Book now</NavLink>
+            <NavLink to="/" end>
+              Home
+            </NavLink>
+
+            <NavLink to="/blog">
+              Blog
+            </NavLink>
+
+            <NavLink to="/shop">
+              Shop
+            </NavLink>
+
+            <NavLink to="/installation">
+              Installation
+            </NavLink>
+
+            <NavLink to="/book" className="pill">
+              Book now
+            </NavLink>
           </nav>
 
           <div className="nav-r">
@@ -88,22 +138,46 @@ export default function Navbar({ lenisRef }) {
               aria-controls="mobile-menu"
               onClick={() => setMenu((m) => !m)}
             >
-              <i /><i />
+              <i />
+              <i />
             </button>
           </div>
         </div>
       </header>
 
-      <div id="mobile-menu" className={'mmenu' + (menu ? ' on' : '')} aria-hidden={!menu}>
+      <div
+        id="mobile-menu"
+        className={'mmenu' + (menu ? ' on' : '')}
+        aria-hidden={!menu}
+      >
         {links.map(([to, label], i) => (
-          <NavLink key={to} to={to} end={to === '/'} tabIndex={menu ? 0 : -1} className="m-link">
-            <span className="m-num">0{i + 1}</span>
+          <NavLink
+            key={to}
+            to={to}
+            end={to === '/'}
+            tabIndex={menu ? 0 : -1}
+            className="m-link"
+          >
+            <span className="m-num">
+              0{i + 1}
+            </span>
+
             {label}
           </NavLink>
         ))}
+
         <div className="m-foot">
-          <Link to="/book" className="btn" tabIndex={menu ? 0 : -1}>Book installation</Link>
-          <p className="muted">Human hair wigs and expert installation.</p>
+          <Link
+            to="/book"
+            className="btn"
+            tabIndex={menu ? 0 : -1}
+          >
+            Book installation
+          </Link>
+
+          <p className="muted">
+            Human hair wigs and expert installation.
+          </p>
         </div>
       </div>
     </>
