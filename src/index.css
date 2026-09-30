@@ -183,41 +183,87 @@ html.lock{overflow:hidden}
 
 
 
-
-
-
-
-
 /* HERO */
-.hero{position:relative;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
-.hero-frame{position:absolute;inset:0;overflow:hidden;clip-path:inset(0% 0% 0% 0% round 0px);will-change:clip-path}
-.hero-bg{position:absolute;inset:0;
- background:linear-gradient(rgba(0,0,0,.05),rgba(0,0,0,.45)),url(/hero.jpg) center/cover,linear-gradient(160deg,#2b2540,#7c5cff);
- will-change:transform}
-.hero-txt{position:absolute;left:max(4vw,env(safe-area-inset-left,0px));right:4vw;bottom:calc(env(safe-area-inset-bottom,0px) + 9vh);color:#fff}
-.hero-txt h1{font-size:clamp(2.6rem,9.5vw,6.5rem);line-height:.98}
-.hl{overflow:hidden;padding-bottom:.08em}
-.hl span{display:block}
+.hero{position:relative;height:100vh;height:100svh;overflow:hidden;background:#111}
+.hero-frame{position:absolute;inset:0;overflow:hidden;clip-path:inset(0% 0% 0% 0% round 0px)}
+.hero-zoom,.hero-intro{position:absolute;inset:0}
+
+/* two stacked layers: hero.jpg underneath, hero1.jpg slides up over it */
+.layer{position:absolute;inset:0;overflow:hidden;background:linear-gradient(160deg,#2b2540,#7c5cff)}
+.l1{z-index:1}
+.l2{z-index:2;visibility:hidden} /* GSAP shows it and positions it */
+.l2-in{position:absolute;inset:0;overflow:hidden}
+.img{
+  position:absolute;left:0;top:-6%;width:100%;height:112%;
+  object-fit:cover;object-position:center 30%;
+  display:block;max-width:none;
+  user-select:none;-webkit-user-drag:none;
+}
+
+/* readable text over the photos + behind the transparent navbar */
+.hero-shade{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  background:
+    linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,0) 22%),
+    linear-gradient(rgba(0,0,0,0) 35%,rgba(0,0,0,.6));
+}
+
+.hero-txt{
+  position:absolute;z-index:4;
+  left:max(4vw,env(safe-area-inset-left,0px));right:4vw;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 9vh);
+  color:#fff;
+}
+.hero-heads{display:grid}
+.hero-heads h1{
+  grid-area:1/1;
+  font-size:clamp(2.4rem,min(10vw,13svh),6.5rem);
+  line-height:.98;letter-spacing:-.03em;
+}
+.h-b{opacity:0} /* GSAP reveals it */
+.hl{display:block;overflow:hidden;padding-bottom:.08em}
+.hl > span{display:block}
+
 .hero-cta{display:flex;gap:.8rem;margin-top:1.6rem;flex-wrap:wrap}
-.hero-hint{position:absolute;right:4vw;bottom:calc(env(safe-area-inset-bottom,0px) + 9vh);color:#fff;display:flex;flex-direction:column;align-items:center;gap:.6rem;font-size:.85rem}
+.hero .btn.ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.65)}
+.hero .btn.ghost:hover{background:#fff;color:var(--ink,#111);border-color:#fff}
+
+.hero-hint{
+  position:absolute;z-index:4;right:4vw;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 9vh);
+  color:#fff;display:flex;flex-direction:column;align-items:center;gap:.6rem;font-size:.85rem;
+}
 .hero-hint i{width:1px;height:48px;background:#fff;transform-origin:top;animation:hint 1.8s ease-in-out infinite}
 @keyframes hint{0%{transform:scaleY(0)}60%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
 
-/* PLACEHOLDER SECTION */
+.hero-bar{
+  position:absolute;z-index:4;
+  left:max(4vw,env(safe-area-inset-left,0px));right:4vw;
+  bottom:calc(env(safe-area-inset-bottom,0px) + 3.5vh);
+  height:2px;background:rgba(255,255,255,.25);border-radius:2px;overflow:hidden;
+}
+.hero-bar i{display:block;height:100%;background:#fff;transform:scaleX(0);transform-origin:left}
+
 .next{padding:18vh 4vw;min-height:80vh}
 
 /* RESPONSIVE */
-@media(max-width:800px){.desk{display:none}.burger{display:block}.hero-hint{display:none}}
 @media(min-width:801px){.mmenu{display:none}}
-@media(max-width:380px){.logo{font-size:1.3rem}.btn{padding:.75rem 1.2rem;font-size:.9rem}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media(max-width:800px){
+  .hero-hint{display:none}
+  .hero-txt{bottom:calc(env(safe-area-inset-bottom,0px) + 11vh)}
+  .img{object-position:center 25%}
+}
+@media(max-width:380px){
+  .btn{padding:.75rem 1.2rem;font-size:.9rem}
+  .hero-cta{gap:.6rem}
+}
+@media(max-height:480px) and (orientation:landscape){
+  .hero-txt{bottom:calc(env(safe-area-inset-bottom,0px) + 8vh)}
+  .hero-heads h1{font-size:clamp(1.8rem,9svh,3rem)}
+  .hero-cta{margin-top:.8rem}
+}
+@media(prefers-reduced-motion:reduce){.hero-hint i{animation:none}}
 
-
-
-
-/* GHOST BUTTON (dark) */
-.btn.ghost{background:none;color:var(--ink);border:1px solid var(--ink)}
-.btn.ghost:hover{background:var(--ink);color:#fff}
 
 /* MARQUEE */
 .marq{overflow:hidden;border-block:1px solid var(--line);padding:1rem 0;background:#fff}
