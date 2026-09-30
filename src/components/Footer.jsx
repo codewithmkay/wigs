@@ -18,8 +18,6 @@ const CONTACT = {
   place: 'Nairobi, Kenya',
 }
 
-const TRUST = ['Free shipping', '100% human hair', 'Expert installation', 'Secure checkout']
-
 const labels = { instagram: 'Instagram', tiktok: 'TikTok', whatsapp: 'WhatsApp' }
 const icons = {
   instagram: <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r=".6" /></svg>,
@@ -36,13 +34,8 @@ export default function Footer({ lenisRef }) {
     const mm = gsap.matchMedia()
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('.f-reveal', {
-        y: 30, opacity: 0, duration: 0.8, stagger: 0.07, ease: 'power3.out',
-        scrollTrigger: { trigger: root.current, start: 'top 85%', once: true },
-      })
-      // the photo drifts slowly as the footer scrolls into view
-      gsap.fromTo('.f-bg', { yPercent: -6 }, {
-        yPercent: 6, ease: 'none',
-        scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'bottom bottom', scrub: true },
+        y: 24, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: root.current, start: 'top 90%', once: true },
       })
     }, root)
     return () => mm.revert()
@@ -65,30 +58,14 @@ export default function Footer({ lenisRef }) {
     <>
       <footer className="footer" ref={root}>
         <div className="f-bg" aria-hidden="true" />
-
         <div className="f-in">
-          {/* call to action */}
-          <div className="f-cta">
-            <span className="f-eye f-reveal">Nywele Affordable KE</span>
-            <h2 className="f-reveal">Hair that feels like yours.</h2>
-            <p className="f-reveal">Human hair wigs and expert installation, made affordable.</p>
-            <div className="f-actions f-reveal">
-              <Link to="/shop" className="btn">Shop wigs</Link>
-              <Link to="/book" className="f-line">Book installation</Link>
-            </div>
-            <ul className="f-trust f-reveal">
-              {TRUST.map((t) => <li key={t}>{t}</li>)}
-            </ul>
-          </div>
-
-          {/* main columns */}
           <div className="f-grid">
-            <div className="f-reveal f-brand">
+            <div className="f-brand f-reveal">
               <Link to="/" className="f-logo" aria-label="Nywele Affordable KE, home">
                 <b>Nywele</b>
                 <small>affordable_ke</small>
               </Link>
-              <p className="muted">New drops and offers, straight to your inbox.</p>
+              <p>Human hair wigs and expert installation, made affordable.</p>
 
               {state === 'done' ? (
                 <p className="f-ok" role="status">You are on the list. Thank you!</p>
@@ -100,25 +77,22 @@ export default function Footer({ lenisRef }) {
                     aria-invalid={state === 'error'} aria-describedby="f-err"
                     onChange={(e) => { setEmail(e.target.value); if (state === 'error') setState('idle') }}
                   />
-                  <button type="submit" disabled={state === 'busy'}>
-                    {state === 'busy' ? '...' : 'Join'}
-                  </button>
+                  <button type="submit" disabled={state === 'busy'}>{state === 'busy' ? '...' : 'Join'}</button>
                 </form>
               )}
-              {state === 'error' && (
-                <p id="f-err" className="f-err" role="alert">Enter a valid email, like name@example.com.</p>
-              )}
+              {state === 'error' && <p id="f-err" className="f-err" role="alert">Enter a valid email.</p>}
             </div>
 
-            <nav className="f-reveal f-col" aria-label="Explore">
+            <nav className="f-col f-reveal" aria-label="Explore">
               <h3>Explore</h3>
               <Link to="/">Home</Link>
               <Link to="/shop">Shop</Link>
+              <Link to="/blog">Blog</Link>
               <Link to="/installation">Installation</Link>
               <Link to="/book">Book</Link>
             </nav>
 
-            <div className="f-reveal f-col">
+            <div className="f-col f-reveal">
               <h3>Contact</h3>
               <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
               <a href={`tel:${CONTACT.phone.replace(/\s/g, '')}`}>{CONTACT.phone}</a>
@@ -126,7 +100,7 @@ export default function Footer({ lenisRef }) {
               <span>{CONTACT.hours}</span>
             </div>
 
-            <div className="f-reveal f-col">
+            <div className="f-col f-reveal">
               <h3>Follow</h3>
               <div className="f-social">
                 {Object.keys(SOCIAL).map((k) => (
@@ -138,7 +112,6 @@ export default function Footer({ lenisRef }) {
             </div>
           </div>
 
-          {/* bottom bar */}
           <div className="f-bottom">
             <span>&copy; {new Date().getFullYear()} Nywele Affordable KE</span>
             <div className="f-legal">
