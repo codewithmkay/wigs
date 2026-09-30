@@ -17,33 +17,176 @@ button{font:inherit;cursor:pointer;background:none;border:0;color:inherit}
 .btn.light.ghost{background:none;color:#fff;border:1px solid #fff}
 .btn.light.ghost:hover{background:#fff;color:var(--ink)}
 
+
+
+
+
+
+
+
 /* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
- padding:calc(env(safe-area-inset-top,0px) + .8rem) max(4vw,env(safe-area-inset-right,0px)) .8rem max(4vw,env(safe-area-inset-left,0px));
- mix-blend-mode:difference;color:#fff}
-.logo{font-size:1.5rem;font-weight:800;letter-spacing:-.04em}
-.desk{display:flex;gap:1.6rem;align-items:center;margin-left:auto;font-family:Syne,sans-serif;font-weight:600}
-.desk a{padding:.4rem 0}
-.desk a.active{text-decoration:underline;text-underline-offset:6px}
-.desk a.pill{border:1px solid currentColor;border-radius:99px;padding:.3rem 1rem;text-decoration:none}
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding:calc(env(safe-area-inset-top,0px) + .7rem) max(3vw,env(safe-area-inset-right,0px)) 0 max(3vw,env(safe-area-inset-left,0px));
+  pointer-events:none;
+  color:#fff;
+  mix-blend-mode:difference; /* at the top: text adapts to whatever is behind it */
+  transition:padding .35s;
+}
+.nav-in{
+  pointer-events:auto;
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:.45rem .5rem .45rem .55rem;
+  border-radius:99px;
+  background:transparent;
+  border:1px solid transparent;
+  box-shadow:none;
+  transition:background .4s,box-shadow .4s,border-color .4s,padding .35s;
+}
+
+/* AFTER SCROLL: blending off, glass pill appears */
+.nav.scrolled{
+  mix-blend-mode:normal;
+  color:var(--ink,#111);
+}
+.nav.scrolled .nav-in{
+  background:rgba(255,255,255,.85);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+  backdrop-filter:saturate(180%) blur(14px);
+  border-color:rgba(0,0,0,.07);
+  box-shadow:0 10px 30px rgba(0,0,0,.10);
+}
+
+/* MENU OPEN: bar melts into the white full-screen menu */
+.nav.open{
+  mix-blend-mode:normal;
+  color:var(--ink,#111);
+}
+.nav.open .nav-in{
+  background:transparent;border-color:transparent;box-shadow:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+
+/* LOGO: image mark + compact stacked wordmark (long name fits everywhere) */
+.logo{display:flex;align-items:center;gap:.6rem;min-width:0;text-decoration:none;color:inherit}
+.logo-mark{
+  flex:none;width:42px;height:42px;border-radius:50%;overflow:hidden;
+  display:grid;place-items:center;
+  background:currentColor;
+  transition:box-shadow .35s;
+}
+.logo-mark img{width:100%;height:100%;object-fit:cover;display:block}
+.logo-mark b{font:800 1.2rem/1 Syne,sans-serif;color:#000}
+.nav.scrolled .logo-mark,
+.nav.open .logo-mark{
+  background:var(--ink,#111);
+  box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(0,0,0,.08);
+}
+.nav.scrolled .logo-mark b,
+.nav.open .logo-mark b{color:#fff}
+.logo-txt{display:flex;flex-direction:column;line-height:1;min-width:0}
+.logo-txt b{
+  font:800 1.25rem/1 Syne,sans-serif;letter-spacing:-.04em;
+  white-space:nowrap;
+}
+.logo-txt small{
+  margin-top:.28rem;
+  font:600 .6rem/1 Syne,sans-serif;letter-spacing:.2em;text-transform:uppercase;
+  opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* DESKTOP LINKS */
+.desk{display:flex;gap:.3rem;align-items:center;margin-left:auto;font-family:Syne,sans-serif;font-weight:600;font-size:.95rem}
+.desk a{position:relative;padding:.5rem .95rem;border-radius:99px;transition:background .25s,color .25s,border-color .25s}
+.desk a:not(.pill)::after{
+  content:"";position:absolute;left:.95rem;right:.95rem;bottom:.28rem;height:2px;border-radius:2px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.7,0,.2,1);
+}
+.desk a:not(.pill):hover::after,
+.desk a.active:not(.pill)::after{transform:scaleX(1)}
+
+/* Book pill: outlined at the top, solid after scroll */
+.desk a.pill{
+  margin-left:.4rem;padding:.55rem 1.3rem;
+  border:1px solid currentColor;background:transparent;color:inherit;text-decoration:none;
+}
+.desk a.pill:hover{background:#fff;color:#000}
+.nav.scrolled .desk a.pill{
+  background:var(--ink,#111);color:#fff;border-color:var(--ink,#111);
+}
+.nav.scrolled .desk a.pill:hover,
+.nav.scrolled .desk a.pill.active{background:var(--acc,#c2185b);border-color:var(--acc,#c2185b)}
+
+/* BURGER */
 .nav-r{display:flex;align-items:center}
-.burger{display:none;width:44px;height:44px;position:relative;-webkit-tap-highlight-color:transparent}
-.burger i{position:absolute;left:11px;right:11px;height:2px;border-radius:2px;background:currentColor;transition:transform .35s,top .35s}
-.burger i:first-child{top:17px}.burger i:last-child{top:25px}
+.burger{
+  display:none;width:44px;height:44px;position:relative;border-radius:50%;
+  background:transparent;border:0;color:inherit;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.burger i{position:absolute;left:12px;right:12px;height:2px;border-radius:2px;background:currentColor;transition:transform .35s,top .35s}
+.burger i:first-child{top:17px}
+.burger i:last-child{top:25px}
 .burger.on i:first-child{top:21px;transform:rotate(45deg)}
 .burger.on i:last-child{top:21px;transform:rotate(-45deg)}
 
-.mmenu{position:fixed;inset:0;z-index:49;background:#fff;color:var(--ink);display:flex;flex-direction:column;justify-content:center;gap:.3rem;overflow-y:auto;
- padding:calc(env(safe-area-inset-top,0px) + 5rem) max(6vw,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 2rem) max(6vw,env(safe-area-inset-left,0px));
- clip-path:circle(0 at calc(100% - 44px) calc(env(safe-area-inset-top,0px) + 2.2rem));
- visibility:hidden;pointer-events:none;
- transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s .7s}
-.mmenu.on{clip-path:circle(150% at calc(100% - 44px) calc(env(safe-area-inset-top,0px) + 2.2rem));
- visibility:visible;pointer-events:auto;transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s}
-.m-link{display:block;padding:.1rem 0;font:800 clamp(2.2rem,min(13vw,9dvh),4.5rem)/1.1 Syne,sans-serif;letter-spacing:-.03em}
-.m-link.active{color:var(--acc)}
+/* MOBILE MENU */
+.mmenu{
+  position:fixed;inset:0;z-index:49;background:#fff;color:var(--ink,#111);
+  display:flex;flex-direction:column;justify-content:flex-start;gap:.3rem;
+  overflow-y:auto;overflow-x:hidden;
+  padding:calc(env(safe-area-inset-top,0px) + 5rem) max(6vw,env(safe-area-inset-right,0px)) calc(env(safe-area-inset-bottom,0px) + 2rem) max(6vw,env(safe-area-inset-left,0px));
+  clip-path:circle(0 at calc(100% - 44px) calc(env(safe-area-inset-top,0px) + 2.2rem));
+  visibility:hidden;pointer-events:none;
+  transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s .7s;
+}
+/* centre when there is room, scroll from the top when there isn't */
+.mmenu > :first-child{margin-top:auto}
+.mmenu > :last-child{margin-bottom:auto}
+.mmenu.on{
+  clip-path:circle(150% at calc(100% - 44px) calc(env(safe-area-inset-top,0px) + 2.2rem));
+  visibility:visible;pointer-events:auto;
+  transition:clip-path .7s cubic-bezier(.7,0,.2,1),visibility 0s;
+}
+.m-link{
+  display:flex;align-items:baseline;gap:.6rem;padding:.1rem 0;max-width:100%;
+  white-space:nowrap;
+  /* sized so the longest word ("Installation") always fits the screen width */
+  font:800 clamp(1.7rem,min(8.6vw,8dvh),4.5rem)/1.1 Syne,sans-serif;letter-spacing:-.03em;
+}
+.m-num{
+  flex:none;min-width:1.6em;
+  font:600 .7rem/1 Syne,sans-serif;letter-spacing:.08em;opacity:.35;transform:translateY(-.9em);
+}
+.m-link.active{color:var(--acc,#c2185b)}
 .m-foot{margin-top:1.8rem;display:grid;gap:1rem;justify-items:start}
 html.lock{overflow:hidden}
+
+/* RESPONSIVE */
+@media (max-width:800px){
+  .desk{display:none}
+  .burger{display:block}
+  .nav-in{padding:.4rem .4rem .4rem .5rem}
+  .logo-mark{width:38px;height:38px}
+  .logo-txt b{font-size:1.1rem}
+}
+@media (max-width:360px){
+  .logo{gap:.45rem}
+  .logo-txt small{font-size:.52rem;letter-spacing:.14em}
+  .m-link{gap:.45rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .nav,.nav-in,.desk a,.desk a::after,.burger i,.mmenu{transition:none}
+}
+
+
+
+
+
+
+
+
 
 /* HERO */
 .hero{position:relative;height:100vh;height:100svh;overflow:hidden;background:var(--bg)}
