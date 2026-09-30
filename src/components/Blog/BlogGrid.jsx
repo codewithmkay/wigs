@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { posts } from './blogData'
+import { posts } from './BlogData'
 import BlogCard from './BlogCard'
 
 export default function BlogGrid() {
