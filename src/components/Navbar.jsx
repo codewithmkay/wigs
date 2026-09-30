@@ -74,6 +74,7 @@ export default function Navbar({ lenisRef }) {
 
           <nav className="desk" aria-label="Main">
             <NavLink to="/" end>Home</NavLink>
+             <NavLink to="/Blog">Blog</NavLink>
             <NavLink to="/shop">Shop</NavLink>
             <NavLink to="/installation">Installation</NavLink>
             <NavLink to="/book" className="pill">Book now</NavLink>
