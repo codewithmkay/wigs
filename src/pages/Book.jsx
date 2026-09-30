@@ -1,10 +1,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import useScramble from '../hooks/useScramble'
-import WigPicker from '../components/book/WigPicker'
-import Cart from '../components/book/Cart'
-import Checkout from '../components/book/Checkout'
-import { INSTALL_FEE } from '../components/book/bookData'
+import WigPicker from '../components/Book/WigPicker'
+import Cart from '../components/Book/Cart'
+import Checkout from '../components/Book/Checkout'
+import { INSTALL_FEE } from '../components/Book/bookData'
 
 const KEY = 'nywele-cart'
 
