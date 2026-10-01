@@ -1,16 +1,48 @@
-# React + Vite
+# Nywele Affordable KE
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Nywele Affordable KE** is a modern wig e-commerce website designed to make finding and shopping for quality wigs simple, visual, and accessible.
 
-Currently, two official plugins are available:
+The project focuses on a clean, futuristic shopping experience with responsive layouts, smooth animations, and product-focused interactions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Live Demo
 
-## React Compiler
+🔗 https://wigs-six.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+* Responsive design for mobile, tablet, and desktop
+* Modern wig product catalog
+* Product details including price, length, texture, color, and lace type
+* Smooth GSAP animations and scroll interactions
+* Interactive product cards
+* Clean and intuitive shopping experience
+* Fast Vite-powered frontend
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+* **React**
+* **Vite**
+* **JavaScript / JSX**
+* **GSAP**
+* **CSS**
+
+## Getting Started
+
+Clone the repository and install the dependencies:
+
+```bash
+npm install
+npm run dev
+```
+
+The application will then be available through the local Vite development server.
+
+## Project Status
+
+🚧 **In development** — additional e-commerce functionality and backend features can be added as the platform evolves.
+
+## Developer
+
+Built by **Maverick Kabogo** — Fullstack Software Developer.
+
+[Live Demo](https://wigs-six.vercel.app/)
