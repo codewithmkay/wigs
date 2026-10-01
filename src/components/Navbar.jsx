@@ -10,7 +10,7 @@ const links = [
   ['/book', 'Book'],
 ]
 
-const LOGO_SRC = '/logo.png'
+const LOGO_SRC = '/logo1.jpg'
 
 export default function Navbar({ lenisRef }) {
   const [menu, setMenu] = useState(false)
